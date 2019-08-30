@@ -117,6 +117,10 @@ public class DefaultWXHttpAdapter implements IWXHttpAdapter {
     });
   }
 
+  protected int getTimeout(){
+    return 3000;
+  }
+
 
   /**
    * Opens an {@link HttpURLConnection} with parameters.
@@ -129,8 +133,8 @@ public class DefaultWXHttpAdapter implements IWXHttpAdapter {
   private HttpURLConnection openConnection(WXRequest request, OnHttpListener listener) throws IOException {
     URL url = new URL(request.url);
     HttpURLConnection connection = createConnection(url);
-    connection.setConnectTimeout(request.timeoutMs);
-    connection.setReadTimeout(request.timeoutMs);
+    connection.setConnectTimeout(getTimeout() > request.timeoutMs ? getTimeout() : request.timeoutMs);
+    connection.setReadTimeout(getTimeout() > request.timeoutMs ? getTimeout() : request.timeoutMs);
     connection.setUseCaches(false);
     connection.setDoInput(true);
 

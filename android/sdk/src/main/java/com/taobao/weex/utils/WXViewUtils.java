@@ -174,7 +174,33 @@ public class WXViewUtils {
     displayMetrics.xdpi = metrics.xdpi;
   }
 
+
+  private static int userScreenWidth;
+  private static int userScreenHeight;
+  private static boolean isUserAvailable;
+
+  /**
+   * 设置用户的实际屏幕宽高
+   * @param width 屏幕宽
+   * @param height 屏幕高
+   * @param isAvailable 是否可用；默认false，不可用
+   */
+  public static void setUserScreen(int width,int height,boolean isAvailable){
+    userScreenWidth = width;
+    userScreenHeight = height;
+    isUserAvailable = isAvailable;
+  }
+
+
   public static int getScreenWidth(Context ctx) {
+    if(isUserAvailable){
+      mScreenWidth = userScreenWidth;
+      if (WXEnvironment.isApkDebugable()){
+        WXLogUtils.d("使用指定的屏幕宽：" + userScreenWidth);
+      }
+      return mScreenWidth;
+    }
+
     if(ctx!=null){
       Resources res = ctx.getResources();
       mScreenWidth = res.getDisplayMetrics().widthPixels;
@@ -182,7 +208,7 @@ public class WXViewUtils {
         mScreenHeight = res
                 .getDisplayMetrics()
                 .heightPixels;
-        mScreenWidth = mScreenHeight > mScreenWidth ? mScreenWidth : mScreenHeight;
+        mScreenWidth = mScreenHeight > mScreenWidth ? mScreenHeight : mScreenWidth;
       }
     } else if(WXEnvironment.isApkDebugable()){
       throw new WXRuntimeException("Error Context is null When getScreenHeight");
@@ -240,6 +266,13 @@ public class WXViewUtils {
   }
 //  get screen height without status bar
   public static int getScreenHeight(Context cxt) {
+    if(isUserAvailable){
+      mScreenHeight = userScreenHeight;
+      if (WXEnvironment.isApkDebugable()){
+        WXLogUtils.d("使用指定的屏幕宽：" + userScreenHeight);
+      }
+      return mScreenHeight;
+    }
     if(cxt!=null){
       Resources res = cxt.getResources();
       mScreenHeight = res.getDisplayMetrics().heightPixels;
@@ -247,7 +280,7 @@ public class WXViewUtils {
         mScreenWidth = res
                 .getDisplayMetrics()
                 .widthPixels;
-        mScreenHeight = mScreenHeight > mScreenWidth ? mScreenHeight : mScreenWidth;
+        mScreenHeight = mScreenHeight > mScreenWidth ? mScreenWidth : mScreenHeight;
       }
     } else if (WXEnvironment.isApkDebugable()){
       throw new WXRuntimeException("Error Context is null When getScreenHeight");
