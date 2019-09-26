@@ -69,6 +69,7 @@ namespace WeexCore {
 
     class EagleBridge {
     public:
+        static EagleBridge* GetInstance();
         class WeexCoreHandler {
         public:
             EagleRenderObject GetEagleRenderObject(const std::string &type, const std::string &ref);
@@ -131,12 +132,6 @@ namespace WeexCore {
             virtual void DispatchPageLifecycle(const std::string &page_id) {};
         };
         
-        static EagleBridge* GetInstance() {
-            if (!g_instance) {
-                g_instance = new EagleBridge();
-            }
-            return g_instance;
-        }
         DataRenderHandler *data_render_handler() const {return data_render_handler_.get();}
         void set_data_render_handler(DataRenderHandler *data_render_handler) {data_render_handler_.reset(data_render_handler);}
         WeexCoreHandler* weex_core_handler() const {return weex_core_handler_.get();}

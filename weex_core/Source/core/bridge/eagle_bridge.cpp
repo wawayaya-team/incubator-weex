@@ -109,6 +109,13 @@ namespace WeexCore {
         render_object_impl_->RemoveRenderObject(child.render_object_impl_);
     }
 
+    EagleBridge* EagleBridge::GetInstance() {
+        if (!g_instance) {
+            g_instance = new EagleBridge();
+        }
+        return g_instance;
+    }
+
     EagleRenderObject EagleBridge::WeexCoreHandler::GetEagleRenderObject(const std::string &type, const std::string &ref) {
         return EagleRenderObject(static_cast<WeexCore::RenderObject*>(WeexCore::RenderCreator::GetInstance()->CreateRender(type, ref)));
     }

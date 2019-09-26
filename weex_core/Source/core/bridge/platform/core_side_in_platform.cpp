@@ -500,12 +500,15 @@ int CoreSideInPlatform::CreateInstance(const char *instanceId, const char *func,
                                        const char *render_strategy) {
   // First check about DATA_RENDER mode
   if (render_strategy != nullptr) {
+      std::string instanceId_ = std::string(instanceId);
+      std::string func_ = std::string(func);
+      std::string opts_ = std::string(opts);
+      std::string initData_ = std::string(initData);
+      std::string extendsApi_ = std::string(extendsApi);
     std::function<void(const char *, const char *)> exec_js =
-        [instanceId = std::string(instanceId), func = std::string(func),
-         opts = std::string(opts), initData = std::string(initData),
-         extendsApi = std::string(extendsApi)](const char *result, const char *bundleType) {
+        [instanceId_,func_,opts_,initData_,extendsApi_](const char *result, const char *bundleType) {
           std::string error;
-          auto opts_json = json11::Json::parse(opts, error);
+          auto opts_json = json11::Json::parse(opts_, error);
           std::map<std::string, json11::Json> &opts_map =
               const_cast<std::map<std::string, json11::Json> &>(
                   opts_json.object_items());
@@ -514,9 +517,9 @@ int CoreSideInPlatform::CreateInstance(const char *instanceId, const char *func,
           WeexCoreManager::Instance()
               ->script_bridge()
               ->script_side()
-              ->CreateInstance(instanceId.c_str(), func.c_str(), result,
-                               opts_json.dump().c_str(), initData.c_str(),
-                               strcmp("Rax", bundleType) ? "\0" : extendsApi.c_str(),
+              ->CreateInstance(instanceId_.c_str(), func_.c_str(), result,
+                               opts_json.dump().c_str(), initData_.c_str(),
+                               strcmp("Rax", bundleType) ? "\0" : extendsApi_.c_str(),
                                params);
         };
     if (strcmp(render_strategy, "DATA_RENDER") == 0) {
