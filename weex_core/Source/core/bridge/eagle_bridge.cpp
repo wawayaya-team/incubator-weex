@@ -28,7 +28,7 @@
 
 
 namespace WeexCore {
-    EagleBridge *EagleBridge::g_instance = nullptr;
+//    EagleBridge *EagleBridge::g_instance = nullptr;
     
     EagleRenderObject::EagleRenderObject():render_object_impl_(nullptr) {}
 
@@ -107,13 +107,6 @@ namespace WeexCore {
 
     void EagleRenderObject::RemoveRenderObject(EagleRenderObject child) {
         render_object_impl_->RemoveRenderObject(child.render_object_impl_);
-    }
-
-    EagleBridge* EagleBridge::GetInstance() {
-        if (!g_instance) {
-            g_instance = new EagleBridge();
-        }
-        return g_instance;
     }
 
     EagleRenderObject EagleBridge::WeexCoreHandler::GetEagleRenderObject(const std::string &type, const std::string &ref) {
